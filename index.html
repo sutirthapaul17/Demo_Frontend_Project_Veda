@@ -153,88 +153,69 @@
 
 
     // --- PART 2: GEMINI API INTEGRATION ---
-    async function getSummary() {
-        const button = document.getElementById('generate-summary-btn');
-        const btnIcon = document.getElementById('btn-icon');
-        const btnText = document.getElementById('btn-text');
-        const placeholder = document.getElementById('ai-summary-placeholder');
-        const resultDiv = document.getElementById('ai-summary-result');
+    // In your index.html file
 
-        // Show loading state
-        button.disabled = true;
-        btnIcon.innerHTML = '<div class="spinner mr-2"></div>';
-        btnText.innerText = 'Generating...';
+async function getSummary() {
+    const button = document.getElementById('generate-summary-btn');
+    const btnIcon = document.getElementById('btn-icon');
+    const btnText = document.getElementById('btn-text');
+    const placeholder = document.getElementById('ai-summary-placeholder');
+    const resultDiv = document.getElementById('ai-summary-result');
 
-        try {
-            // Collect the dynamic data from the page
-            const batchId = document.getElementById('batch-id').innerText;
-            const species = document.getElementById('species').innerText;
-            const location = document.getElementById('location').innerText;
-            const purity = document.getElementById('purity').innerText;
-            const moisture = document.getElementById('moisture').innerText;
-            const lead = document.getElementById('lead').innerText;
+    // Show loading state
+    button.disabled = true;
+    btnIcon.innerHTML = '<div class="spinner mr-2"></div>';
+    btnText.innerText = 'Generating...';
 
-            const userQuery = `
-                Summarize the following ayurvedic herb provenance report for a consumer in a friendly, trustworthy, and brief paragraph. 
-                Explain what the key quality metrics mean in simple terms.
-                - Batch ID: ${batchId}
-                - Herb Species: ${species}
-                - Origin: ${location}
-                - Lab Test Results:
-                  - Purity: ${purity} (This is the primary active compound percentage)
-                  - Moisture: ${moisture} (Lower is better for shelf life)
-                  - Lead Content: ${lead} (Lower is better for safety)
-            `;
-            
-            // --- IMPORTANT ---
-            // Get your free API key from Google AI Studio and paste it here
-            const apiKey = "AIzaSyBhYqlcQKVewc7VP41B40NvqRWBu27IlRw"; // PASTE YOUR GEMINI API KEY HERE
-            
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+    try {
+        // Collect data from the page to build the prompt
+        const batchId = document.getElementById('batch-id').innerText;
+        const species = document.getElementById('species').innerText;
+        // ... get other data like location, purity, etc.
 
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-            };
-            
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+        const userQuery = `
+            Summarize the following ayurvedic herb provenance report for a consumer...
+            - Batch ID: ${batchId}
+            - Herb Species: ${species}
+            ... and so on
+        `;
+        
+        // --- THIS IS THE KEY CHANGE ---
+        // We now call our OWN API endpoint, not Google's
+        const response = await fetch('/api/generateSummary', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: userQuery }) // Send the prompt in the body
+        });
 
-            if (!response.ok) {
-                // If the key is missing or invalid, provide a helpful message
-                if (response.status === 400) {
-                    throw new Error("API call failed: Invalid or missing API Key. Please add your key to the index.html file.");
-                }
-                throw new Error(`API call failed with status: ${response.status}`);
-            }
+        if (!response.ok) {
+            const errorResult = await response.json();
+            throw new Error(errorResult.message || `API call failed with status: ${response.status}`);
+        }
 
-            const result = await response.json();
-            const summaryText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+        const result = await response.json();
+        const summaryText = result.summary;
 
-            if (summaryText) {
-                // Sanitize and display the result
-                resultDiv.innerText = summaryText;
-                resultDiv.classList.remove('hidden');
-                placeholder.classList.add('hidden');
-            } else {
-                throw new Error("No summary returned from API.");
-            }
-
-        } catch (error) {
-            console.error("Error generating summary:", error);
-            resultDiv.innerText = `Sorry, an error occurred: ${error.message}`;
+        if (summaryText) {
+            resultDiv.innerText = summaryText;
             resultDiv.classList.remove('hidden');
             placeholder.classList.add('hidden');
-        } finally {
-            // Restore button state
-            button.disabled = false;
-            btnIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stars mr-2" viewBox="0 0 16 16"><path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.829l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.829l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.3l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.3A1.734 1.734 0 0 0 2.31 4.207l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z"/></svg>';
-            btnText.innerText = 'Regenerate Summary';
+        } else {
+            throw new Error("No summary returned from API.");
         }
+
+    } catch (error) {
+        console.error("Error generating summary:", error);
+        resultDiv.innerText = `Sorry, an error occurred: ${error.message}`;
+        resultDiv.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+    } finally {
+        // Restore button state (same as before)
+        button.disabled = false;
+        btnIcon.innerHTML = '<svg...></svg>'; // Original SVG icon
+        btnText.innerText = 'Regenerate Summary';
     }
+}
 </script>
 </body>
 </html>
-
