@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provenance Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .spinner {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border-left-color: #4f46e5;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto max-w-2xl p-4 sm:p-8">
+
+        <!-- Header Section -->
+        <header class="mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Provenance Report</h1>
+                    <p class="text-lg text-gray-600">Batch ID: <span id="batch-id" class="font-semibold text-green-700">123</span></p>
+                </div>
+                <div class="flex items-center gap-2 px-3 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16"><path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/></svg>
+                    <span>Verified on Blockchain</span>
+                </div>
+            </div>
+            <hr class="mt-4">
+        </header>
+        
+        <!-- Gemini AI Summary Section -->
+        <div class="bg-indigo-50 border border-indigo-200 p-6 rounded-lg shadow-sm mb-8">
+            <h2 class="text-xl font-bold mb-4 text-indigo-900">AI-Powered Summary</h2>
+            <div id="ai-summary-result" class="text-indigo-800 prose prose-sm max-w-none hidden"></div>
+            <p id="ai-summary-placeholder" class="text-indigo-700 mb-4">Click the button to generate a consumer-friendly summary of this product's journey and quality using Gemini.</p>
+            <button id="generate-summary-btn" onclick="getSummary()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg flex items-center transition-colors disabled:bg-indigo-400">
+                <span id="btn-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stars mr-2" viewBox="0 0 16 16"><path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.829l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.829l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.3l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.3A1.734 1.734 0 0 0 2.31 4.207l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z"/></svg>
+                </span>
+                <span id="btn-text">Generate AI Summary</span>
+            </button>
+        </div>
+
+        <!-- Product Info Section -->
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+            <h2 class="text-xl font-bold mb-4">Product Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p class="text-sm text-gray-500">Species</p>
+                    <p id="species" class="font-semibold">Ashwagandha</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Harvest Location</p>
+                    <p id="location" class="font-semibold">Satara, Maharashtra</p>
+                </div>
+            </div>
+             <div class="mt-4">
+                <img src="https://placehold.co/800x400/a3e635/ffffff?text=Map+of+Origin" alt="Map of harvest location" class="rounded-lg w-full h-auto object-cover">
+            </div>
+        </div>
+
+        <!-- Timeline Section -->
+        <div>
+            <h2 class="text-xl font-bold mb-6">Supply Chain Journey</h2>
+            <ol class="relative border-l border-gray-300">                  
+                <li class="mb-10 ml-6">            
+                    <span class="absolute flex items-center justify-center w-6 h-6 bg-green-200 rounded-full -left-3 ring-8 ring-white"><svg class="w-3 h-3 text-green-700" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg></span>
+                    <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900">Collection Event</h3>
+                    <p class="text-xs text-gray-400 mt-1 truncate">Actor: <span id="actor-collection">0x709979...dc79C8</span></p>
+                </li>
+                <li class="mb-10 ml-6">
+                    <span class="absolute flex items-center justify-center w-6 h-6 bg-green-200 rounded-full -left-3 ring-8 ring-white"><svg class="w-3 h-3 text-green-700" fill="currentColor" viewBox="0 0 20 20"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></span>
+                    <h3 class="mb-1 text-lg font-semibold text-gray-900">Processing</h3>
+                    <p class="text-xs text-gray-400 mt-1 truncate">Actor: <span id="actor-processing">0x3C44Cd...FA4293BC</span></p>
+                </li>
+                <li class="ml-6">
+                    <span class="absolute flex items-center justify-center w-6 h-6 bg-green-200 rounded-full -left-3 ring-8 ring-white"><svg class="w-3 h-3 text-green-700" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clip-rule="evenodd"></path></svg></span>
+                    <h3 class="mb-1 text-lg font-semibold text-gray-900">Quality Test</h3>
+                    <div class="p-4 bg-gray-100 rounded-md border border-gray-200">
+                        <h4 class="font-semibold mb-2">Lab Results (On-Chain Verified)</h4>
+                        <ul class="space-y-1 text-sm">
+                            <li class="flex justify-between"><span>Purity Percentage:</span> <span id="purity" class="font-bold text-green-600">98%</span></li>
+                            <li class="flex justify-between"><span>Moisture Content:</span> <span id="moisture">10%</span></li>
+                            <li class="flex justify-between"><span>Lead (Heavy Metals):</span> <span id="lead">2 ppm</span></li>
+                            <li class="flex justify-between items-center"><span>Certificate CID:</span> <span id="cid" class="font-mono bg-gray-200 px-2 py-1 rounded text-xs">QmPass...</span></li>
+                        </ul>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1 truncate">Actor: <span id="actor-lab">0x90F79b...1E93b906</span></p>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+<script>
+    // --- PART 1: DYNAMIC DATA LOADING ---
+    window.onload = () => {
+        const params = new URLSearchParams(window.location.search);
+        const data = params.get('data');
+
+        if (data) {
+            try {
+                // Decode from Base64 and parse the JSON string
+                const decodedData = atob(data);
+                const jsonData = JSON.parse(decodedData);
+                
+                // Update the page with the new data
+                updateElement('batch-id', jsonData.batchId);
+                document.title = `Provenance Report - Batch ${jsonData.batchId}`;
+                updateElement('species', jsonData.species);
+                updateElement('location', jsonData.location);
+                updateElement('actor-collection', truncateAddress(jsonData.actors.collection));
+                updateElement('actor-processing', truncateAddress(jsonData.actors.processing));
+                updateElement('actor-lab', truncateAddress(jsonData.actors.lab));
+                updateElement('purity', `${jsonData.labResults.purity}%`);
+                updateElement('moisture', `${jsonData.labResults.moisture}%`);
+                updateElement('lead', `${jsonData.labResults.lead} ppm`);
+                updateElement('cid', truncateAddress(jsonData.labResults.cid, 8));
+
+            } catch (e) {
+                console.error("Failed to parse data from URL:", e);
+                // If parsing fails, the page will just show the default hard-coded data
+            }
+        }
+    };
+
+    function updateElement(id, value) {
+        const element = document.getElementById(id);
+        if (element && value) {
+            element.innerText = value;
+        }
+    }
+
+    function truncateAddress(address, length = 6) {
+        if (!address) return '';
+        return `${address.substring(0, length)}...${address.substring(address.length - length)}`;
+    }
+
+
+    // --- PART 2: GEMINI API INTEGRATION ---
+    async function getSummary() {
+        const button = document.getElementById('generate-summary-btn');
+        const btnIcon = document.getElementById('btn-icon');
+        const btnText = document.getElementById('btn-text');
+        const placeholder = document.getElementById('ai-summary-placeholder');
+        const resultDiv = document.getElementById('ai-summary-result');
+
+        // Show loading state
+        button.disabled = true;
+        btnIcon.innerHTML = '<div class="spinner mr-2"></div>';
+        btnText.innerText = 'Generating...';
+
+        try {
+            // Collect the dynamic data from the page
+            const batchId = document.getElementById('batch-id').innerText;
+            const species = document.getElementById('species').innerText;
+            const location = document.getElementById('location').innerText;
+            const purity = document.getElementById('purity').innerText;
+            const moisture = document.getElementById('moisture').innerText;
+            const lead = document.getElementById('lead').innerText;
+
+            const userQuery = `
+                Summarize the following ayurvedic herb provenance report for a consumer in a friendly, trustworthy, and brief paragraph. 
+                Explain what the key quality metrics mean in simple terms.
+                - Batch ID: ${batchId}
+                - Herb Species: ${species}
+                - Origin: ${location}
+                - Lab Test Results:
+                  - Purity: ${purity} (This is the primary active compound percentage)
+                  - Moisture: ${moisture} (Lower is better for shelf life)
+                  - Lead Content: ${lead} (Lower is better for safety)
+            `;
+            
+            // --- IMPORTANT ---
+            // Get your free API key from Google AI Studio and paste it here
+            const apiKey = "AIzaSyBhYqlcQKVewc7VP41B40NvqRWBu27IlRw"; // PASTE YOUR GEMINI API KEY HERE
+            
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+            };
+            
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                // If the key is missing or invalid, provide a helpful message
+                if (response.status === 400) {
+                    throw new Error("API call failed: Invalid or missing API Key. Please add your key to the index.html file.");
+                }
+                throw new Error(`API call failed with status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            const summaryText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+            if (summaryText) {
+                // Sanitize and display the result
+                resultDiv.innerText = summaryText;
+                resultDiv.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            } else {
+                throw new Error("No summary returned from API.");
+            }
+
+        } catch (error) {
+            console.error("Error generating summary:", error);
+            resultDiv.innerText = `Sorry, an error occurred: ${error.message}`;
+            resultDiv.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+        } finally {
+            // Restore button state
+            button.disabled = false;
+            btnIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stars mr-2" viewBox="0 0 16 16"><path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.829l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.829l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.3l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.3A1.734 1.734 0 0 0 2.31 4.207l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z"/></svg>';
+            btnText.innerText = 'Regenerate Summary';
+        }
+    }
+</script>
+</body>
+</html>
+
