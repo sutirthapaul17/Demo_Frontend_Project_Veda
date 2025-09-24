@@ -32,14 +32,13 @@
   </head>
   <body class="bg-gray-50 text-gray-800">
     <div class="container mx-auto max-w-2xl p-4 sm:p-8">
-      <!-- Header -->
       <header class="mb-8">
         <div class="flex justify-between items-center">
           <div>
             <h1 class="text-3xl font-bold text-gray-900">Provenance Report</h1>
             <p class="text-lg text-gray-600">
               Batch ID:
-              <span id="batch-id" class="font-semibold text-green-700">123</span>
+              <span id="batch-id" class="font-semibold text-green-700">Loading...</span>
             </p>
           </div>
           <div
@@ -62,140 +61,81 @@
         </div>
         <hr class="mt-4" />
       </header>
+      
+      <div id="status-message" class="text-center p-8 bg-gray-100 rounded-lg">
+          <p class="font-semibold">Connecting to the blockchain and fetching data...</p>
+      </div>
 
-      <!-- Gemini Summary -->
-      <div
-        class="bg-indigo-50 border border-indigo-200 p-6 rounded-lg shadow-sm mb-8"
-      >
-        <h2 class="text-xl font-bold mb-4 text-indigo-900">AI-Powered Summary</h2>
+      <div id="main-content" class="hidden">
         <div
-          id="ai-summary-result"
-          class="text-indigo-800 prose prose-sm max-w-none hidden"
-        ></div>
-        <p id="ai-summary-placeholder" class="text-indigo-700 mb-4">
-          Click the button to generate a consumer-friendly summary of this
-          product's journey and quality.
-        </p>
-        <button
-          id="generate-summary-btn"
-          onclick="getSummary()"
-          class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg flex items-center transition-colors disabled:bg-indigo-400"
+          class="bg-indigo-50 border border-indigo-200 p-6 rounded-lg shadow-sm mb-8"
         >
-          <span id="btn-icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-stars mr-2"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.829l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.829l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.3l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.3A1.734 1.734 0 0 0 2.31 4.207l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z"
-              />
-            </svg>
-          </span>
-          <span id="btn-text">Generate AI Summary</span>
-        </button>
-      </div>
-
-      <!-- Product Info -->
-      <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
-        <h2 class="text-xl font-bold mb-4">Product Details</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <p class="text-sm text-gray-500">Species</p>
-            <p id="species" class="font-semibold">Ashwagandha</p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-500">Harvest Location</p>
-            <p id="location" class="font-semibold">Satara, Maharashtra</p>
-          </div>
+          <h2 class="text-xl font-bold mb-4 text-indigo-900">AI-Powered Summary</h2>
+          <div
+            id="ai-summary-result"
+            class="text-indigo-800 prose prose-sm max-w-none hidden"
+          ></div>
+          <p id="ai-summary-placeholder" class="text-indigo-700 mb-4">
+            Click the button to generate a consumer-friendly summary of this
+            product's journey and quality.
+          </p>
+          <button
+            id="generate-summary-btn"
+            onclick="getSummary()"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg flex items-center transition-colors disabled:bg-indigo-400"
+          >
+            <span id="btn-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-stars mr-2"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.829l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.829l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.3l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.3A1.734 1.734 0 0 0 2.31 4.207l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z"
+                />
+              </svg>
+            </span>
+            <span id="btn-text">Generate AI Summary</span>
+          </button>
         </div>
-        <div class="mt-4">
-          <img
-            src="https://placehold.co/800x400/a3e635/ffffff?text=Map+of+Origin"
-            alt="Map of harvest location"
-            class="rounded-lg w-full h-auto object-cover"
-          />
-        </div>
-      </div>
 
-      <!-- Timeline -->
-      <div>
-        <h2 class="text-xl font-bold mb-6">Supply Chain Journey</h2>
-        <ol class="relative border-l border-gray-300">
-          <li class="mb-10 ml-6">
-            <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900">
-              Collection Event
-            </h3>
-            <p class="text-xs text-gray-400 mt-1 truncate">
-              Actor: <span id="actor-collection">0x709979...dc79C8</span>
-            </p>
-          </li>
-          <li class="mb-10 ml-6">
-            <h3 class="mb-1 text-lg font-semibold text-gray-900">Processing</h3>
-            <p class="text-xs text-gray-400 mt-1 truncate">
-              Actor: <span id="actor-processing">0x3C44Cd...FA4293BC</span>
-            </p>
-          </li>
-          <li class="ml-6">
-            <h3 class="mb-1 text-lg font-semibold text-gray-900">Quality Test</h3>
-            <div class="p-4 bg-gray-100 rounded-md border border-gray-200">
-              <h4 class="font-semibold mb-2">Lab Results (On-Chain Verified)</h4>
-              <ul class="space-y-1 text-sm">
-                <li class="flex justify-between">
-                  <span>Purity Percentage:</span>
-                  <span id="purity" class="font-bold text-green-600">98%</span>
-                </li>
-                <li class="flex justify-between">
-                  <span>Moisture Content:</span> <span id="moisture">10%</span>
-                </li>
-                <li class="flex justify-between">
-                  <span>Lead (Heavy Metals):</span> <span id="lead">2 ppm</span>
-                </li>
-                <li class="flex justify-between items-center">
-                  <span>Certificate CID:</span>
-                  <span id="cid" class="font-mono bg-gray-200 px-2 py-1 rounded text-xs">QmPass...</span>
-                </li>
-              </ul>
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+          <h2 class="text-xl font-bold mb-4">Product Details</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm text-gray-500">Species</p>
+              <p id="species" class="font-semibold">...</p>
             </div>
-            <p class="text-xs text-gray-400 mt-1 truncate">
-              Actor: <span id="actor-lab">0x90F79b...1E93b906</span>
-            </p>
-          </li>
-        </ol>
+            <div>
+              <p class="text-sm text-gray-500">Harvest Location (Coordinates)</p>
+              <p id="location" class="font-semibold">...</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold mb-6">Supply Chain Journey</h2>
+          <ol id="timeline-container" class="relative border-l border-gray-300"></ol>
+        </div>
       </div>
     </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 
     <script>
-      // ---- DYNAMIC DATA ----
-      window.onload = () => {
-        const params = new URLSearchParams(window.location.search);
-        const data = params.get("data");
+      // ---- SMART CONTRACT AND PROVIDER CONFIGURATION ----
+      const contractAddress = "0x3a6a6595A3ff52C463d8A663f7CF08CEEF68bDA3";
+      
+      // ⚠️ PASTE YOUR FULL ABI HERE
+      const abi = [{"type":"constructor","inputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"DEFAULT_ADMIN_ROLE","inputs":[],"outputs":[{"name":"","type":"bytes32","internalType":"bytes32"}],"stateMutability":"view"},{"type":"function","name":"FARMER_ROLE","inputs":[],"outputs":[{"name":"","type":"bytes32","internalType":"bytes32"}],"stateMutability":"view"},{"type":"function","name":"LAB_ROLE","inputs":[],"outputs":[{"name":"","type":"bytes32","internalType":"bytes32"}],"stateMutability":"view"},{"type":"function","name":"PROCESSOR_ROLE","inputs":[],"outputs":[{"name":"","type":"bytes32","internalType":"bytes32"}],"stateMutability":"view"},{"type":"function","name":"addApprovedZone","inputs":[{"name":"species","type":"string","internalType":"string"},{"name":"lat","type":"int256","internalType":"int256"},{"name":"lng","type":"int256","internalType":"int256"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"addLabTest","inputs":[{"name":"batchId","type":"uint256","internalType":"uint256"},{"name":"_purityPercentage","type":"uint256","internalType":"uint256"},{"name":"_moisturePercentage","type":"uint256","internalType":"uint256"},{"name":"_lead_ppm","type":"uint256","internalType":"uint256"},{"name":"_certificateCid","type":"string","internalType":"string"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"addProcessingStep","inputs":[{"name":"batchId","type":"uint256","internalType":"uint256"},{"name":"_data","type":"string","internalType":"string"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"approvedZones","inputs":[{"name":"","type":"string","internalType":"string"},{"name":"","type":"uint256","internalType":"uint256"}],"outputs":[{"name":"lat","type":"int256","internalType":"int256"},{"name":"lng","type":"int256","internalType":"int256"}],"stateMutability":"view"},{"type":"function","name":"batchHistory","inputs":[{"name":"","type":"uint256","internalType":"uint256"},{"name":"","type":"uint256","internalType":"uint256"}],"outputs":[{"name":"stepName","type":"string","internalType":"string"},{"name":"data","type":"string","internalType":"string"},{"name":"labData","type":"tuple","internalType":"struct Traceability.LabTest","components":[{"name":"purityPercentage","type":"uint256","internalType":"uint256"},{"name":"moisturePercentage","type":"uint256","internalType":"uint256"},{"name":"lead_ppm","type":"uint256","internalType":"uint256"},{"name":"certificateCid","type":"string","internalType":"string"}]},{"name":"timestamp","type":"uint256","internalType":"uint256"},{"name":"recordedBy","type":"address","internalType":"address"}],"stateMutability":"view"},{"type":"function","name":"batchLocations","inputs":[{"name":"","type":"uint256","internalType":"uint256"}],"outputs":[{"name":"lat","type":"int256","internalType":"int256"},{"name":"lng","type":"int256","internalType":"int256"}],"stateMutability":"view"},{"type":"function","name":"batchStatus","inputs":[{"name":"","type":"uint256","internalType":"uint256"}],"outputs":[{"name":"","type":"uint8","internalType":"enum Traceability.BatchStatus"}],"stateMutability":"view"},{"type":"function","name":"createCollectionEvent","inputs":[{"name":"batchId","type":"uint256","internalType":"uint256"},{"name":"species","type":"string","internalType":"string"},{"name":"gps","type":"string","internalType":"string"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"createCollectionEventWithGeo","inputs":[{"name":"batchId","type":"uint256","internalType":"uint256"},{"name":"species","type":"string","internalType":"string"},{"name":"lat","type":"int256","internalType":"int256"},{"name":"lng","type":"int256","internalType":"int256"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"demoGeoFencingViolation","inputs":[{"name":"batchId","type":"uint256","internalType":"uint256"},{"name":"species","type":"string","internalType":"string"},{"name":"lat","type":"int256","internalType":"int256"},{"name":"lng","type":"int256","internalType":"int256"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"geoFencingThreshold","inputs":[],"outputs":[{"name":"","type":"uint256","internalType":"uint256"}],"stateMutability":"view"},{"type":"function","name":"getApprovedZones","inputs":[{"name":"species","type":"string","internalType":"string"}],"outputs":[{"name":"","type":"tuple[]","internalType":"struct Traceability.GeoPoint[]","components":[{"name":"lat","type":"int256","internalType":"int256"},{"name":"lng","type":"int256","internalType":"int256"}]}],"stateMutability":"view"},{"type":"function","name":"getBatchHistory","inputs":[{"name":"batchId","type":"uint256","internalType":"uint256"}],"outputs":[{"name":"","type":"tuple[]","internalType":"struct Traceability.Step[]","components":[{"name":"stepName","type":"string","internalType":"string"},{"name":"data","type":"string","internalType":"string"},{"name":"labData","type":"tuple","internalType":"struct Traceability.LabTest","components":[{"name":"purityPercentage","type":"uint256","internalType":"uint256"},{"name":"moisturePercentage","type":"uint256","internalType":"uint256"},{"name":"lead_ppm","type":"uint256","internalType":"uint256"},{"name":"certificateCid","type":"string","internalType":"string"}]},{"name":"timestamp","type":"uint256","internalType":"uint256"},{"name":"recordedBy","type":"address","internalType":"address"}]}],"stateMutability":"view"},{"type":"function","name":"getBatchLocation","inputs":[{"name":"batchId","type":"uint256","internalType":"uint256"}],"outputs":[{"name":"lat","type":"int256","internalType":"int256"},{"name":"lng","type":"int256","internalType":"int256"}],"stateMutability":"view"},{"type":"function","name":"getBatchSummary","inputs":[{"name":"batchId","type":"uint256","internalType":"uint256"}],"outputs":[{"name":"species","type":"string","internalType":"string"},{"name":"stepCount","type":"uint256","internalType":"uint256"},{"name":"currentOwner","type":"address","internalType":"address"},{"name":"passedQualityTest","type":"bool","internalType":"bool"},{"name":"status","type":"uint8","internalType":"enum Traceability.BatchStatus"},{"name":"provenanceSummary","type":"string","internalType":"string"}],"stateMutability":"view"},{"type":"function","name":"getRoleAdmin","inputs":[{"name":"role","type":"bytes32","internalType":"bytes32"}],"outputs":[{"name":"","type":"bytes32","internalType":"bytes32"}],"stateMutability":"view"},{"type":"function","name":"grantFarmerRole","inputs":[{"name":"_farmer","type":"address","internalType":"address"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"grantLabRole","inputs":[{"name":"_lab","type":"address","internalType":"address"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"grantProcessorRole","inputs":[{"name":"_processor","type":"address","internalType":"address"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"grantRole","inputs":[{"name":"role","type":"bytes32","internalType":"bytes32"},{"name":"account","type":"address","internalType":"address"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"hasRole","inputs":[{"name":"role","type":"bytes32","internalType":"bytes32"},{"name":"account","type":"address","internalType":"address"}],"outputs":[{"name":"","type":"bool","internalType":"bool"}],"stateMutability":"view"},{"type":"function","name":"isInApprovedZone","inputs":[{"name":"species","type":"string","internalType":"string"},{"name":"lat","type":"int256","internalType":"int256"},{"name":"lng","type":"int256","internalType":"int256"}],"outputs":[{"name":"","type":"bool","internalType":"bool"}],"stateMutability":"view"},{"type":"function","name":"purityThreshold","inputs":[],"outputs":[{"name":"","type":"uint256","internalType":"uint256"}],"stateMutability":"view"},{"type":"function","name":"renounceRole","inputs":[{"name":"role","type":"bytes32","internalType":"bytes32"},{"name":"callerConfirmation","type":"address","internalType":"address"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"revokeRole","inputs":[{"name":"role","type":"bytes32","internalType":"bytes32"},{"name":"account","type":"address","internalType":"address"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"setGeoFencingThreshold","inputs":[{"name":"_newThreshold","type":"uint256","internalType":"uint256"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"setPurityThreshold","inputs":[{"name":"_newThreshold","type":"uint256","internalType":"uint256"}],"outputs":[],"stateMutability":"nonpayable"},{"type":"function","name":"supportsInterface","inputs":[{"name":"interfaceId","type":"bytes4","internalType":"bytes4"}],"outputs":[{"name":"","type":"bool","internalType":"bool"}],"stateMutability":"view"},{"type":"event","name":"BatchCreated","inputs":[{"name":"batchId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"farmer","type":"address","indexed":true,"internalType":"address"},{"name":"species","type":"string","indexed":false,"internalType":"string"},{"name":"timestamp","type":"uint256","indexed":false,"internalType":"uint256"}],"anonymous":false},{"type":"event","name":"BatchStatusUpdated","inputs":[{"name":"batchId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"newStatus","type":"uint8","indexed":false,"internalType":"enum Traceability.BatchStatus"}],"anonymous":false},{"type":"event","name":"GeoFencingViolated","inputs":[{"name":"batchId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"lat","type":"int256","indexed":false,"internalType":"int256"},{"name":"lng","type":"int256","indexed":false,"internalType":"int256"},{"name":"species","type":"string","indexed":false,"internalType":"string"}],"anonymous":false},{"type":"event","name":"RoleAdminChanged","inputs":[{"name":"role","type":"bytes32","indexed":true,"internalType":"bytes32"},{"name":"previousAdminRole","type":"bytes32","indexed":true,"internalType":"bytes32"},{"name":"newAdminRole","type":"bytes32","indexed":true,"internalType":"bytes32"}],"anonymous":false},{"type":"event","name":"RoleGranted","inputs":[{"name":"role","type":"bytes32","indexed":true,"internalType":"bytes32"},{"name":"account","type":"address","indexed":true,"internalType":"address"},{"name":"sender","type":"address","indexed":true,"internalType":"address"}],"anonymous":false},{"type":"event","name":"RoleRevoked","inputs":[{"name":"role","type":"bytes32","indexed":true,"internalType":"bytes32"},{"name":"account","type":"address","indexed":true,"internalType":"address"},{"name":"sender","type":"address","indexed":true,"internalType":"address"}],"anonymous":false},{"type":"event","name":"StepAdded","inputs":[{"name":"batchId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"stepName","type":"string","indexed":false,"internalType":"string"},{"name":"recordedBy","type":"address","indexed":true,"internalType":"address"},{"name":"timestamp","type":"uint256","indexed":false,"internalType":"uint256"}],"anonymous":false},{"type":"error","name":"AccessControlBadConfirmation","inputs":[]},{"type":"error","name":"AccessControlUnauthorizedAccount","inputs":[{"name":"account","type":"address","internalType":"address"},{"name":"neededRole","type":"bytes32","internalType":"bytes32"}]}];
 
-        if (data) {
-          try {
-            const decodedData = atob(data);
-            const jsonData = JSON.parse(decodedData);
+      // ⚠️ IMPORTANT: Replace with your own RPC provider URL from Infura, Alchemy, etc.
+      const providerUrl = "https://eth-sepolia.g.alchemy.com/v2/Kk3PxAYWo2FaTGGLoDgEb";
 
-            updateElement("batch-id", jsonData.batchId);
-            document.title = `Provenance Report - Batch ${jsonData.batchId}`;
-            updateElement("species", jsonData.species);
-            updateElement("location", jsonData.location);
-            updateElement("actor-collection", truncateAddress(jsonData.actors.collection));
-            updateElement("actor-processing", truncateAddress(jsonData.actors.processing));
-            updateElement("actor-lab", truncateAddress(jsonData.actors.lab));
-            updateElement("purity", `${jsonData.labResults.purity}%`);
-            updateElement("moisture", `${jsonData.labResults.moisture}%`);
-            updateElement("lead", `${jsonData.labResults.lead} ppm`);
-            updateElement("cid", truncateAddress(jsonData.labResults.cid, 8));
-          } catch (e) {
-            console.error("Failed to parse data from URL:", e);
-          }
-        }
-      };
-
+      // ---- HELPER FUNCTIONS ----
       function updateElement(id, value) {
         const element = document.getElementById(id);
         if (element && value) element.innerText = value;
@@ -203,10 +143,132 @@
 
       function truncateAddress(address, length = 6) {
         if (!address) return "";
-        return `${address.substring(0, length)}...${address.substring(address.length - length)}`;
+        return `${address.substring(0, length)}...${address.substring(
+          address.length - 4
+        )}`;
       }
 
-      // ---- GEMINI DIRECT CALL ----
+      function formatTimestamp(unixTimestamp) {
+        const date = new Date(Number(unixTimestamp) * 1000);
+        return date.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+      }
+
+      // ---- MAIN DYNAMIC DATA LOADER ----
+      async function loadProvenanceData() {
+        const statusMessage = document.getElementById("status-message");
+        const mainContent = document.getElementById("main-content");
+        
+        try {
+          // 1. Get Batch ID from URL
+          const params = new URLSearchParams(window.location.search);
+          const batchId = params.get("batchId");
+
+          if (!batchId) {
+            throw new Error("No Batch ID found in URL. Please scan a valid QR code.");
+          }
+          
+          updateElement("batch-id", batchId);
+          document.title = `Provenance Report - Batch ${batchId}`;
+          
+          // 2. Connect to the Blockchain
+          if (!providerUrl.includes("infura.io/v3/YOUR_PROJECT_ID")) {
+             statusMessage.innerText = "Connecting to the blockchain...";
+          }
+          const provider = new ethers.JsonRpcProvider(providerUrl);
+          const contract = new ethers.Contract(contractAddress, abi, provider);
+
+          // 3. Fetch Data from the Smart Contract
+          statusMessage.innerText = `Fetching history for Batch #${batchId}...`;
+          const history = await contract.getBatchHistory(batchId);
+
+          if (!history || history.length === 0) {
+            throw new Error(`Batch #${batchId} not found on the blockchain.`);
+          }
+
+          // 4. Process and Populate Data
+          const collectionStep = history.find(s => s.stepName === "Collection");
+          const qualityTestStep = history.find(s => s.stepName === "QualityTest");
+
+          if (collectionStep) {
+            const dataParts = collectionStep.data.split(' from ');
+            const species = dataParts[0];
+            const coordsRaw = dataParts.length > 1 ? dataParts[1].split(',') : ['0', '0'];
+            const lat = (parseInt(coordsRaw[0]) / 1000000).toFixed(4);
+            const lng = (parseInt(coordsRaw[1]) / 1000000).toFixed(4);
+            
+            updateElement("species", species);
+            updateElement("location", `${lat}°N, ${lng}°E`);
+          }
+
+          // 5. Build the Journey Timeline
+          const timelineContainer = document.getElementById("timeline-container");
+          timelineContainer.innerHTML = ''; // Clear static content
+
+          history.forEach(step => {
+            let detailsHtml = '';
+
+            // Special case for QualityTest to show detailed lab results
+            if (step.stepName === "QualityTest") {
+              const labData = step.labData;
+              detailsHtml = `
+                <div class="p-4 mt-2 bg-gray-100 rounded-md border border-gray-200">
+                  <h4 class="font-semibold mb-2">Lab Results (On-Chain Verified)</h4>
+                  <ul class="space-y-1 text-sm">
+                    <li class="flex justify-between">
+                      <span>Purity Percentage:</span>
+                      <span id="purity" class="font-bold text-green-600">${labData.purityPercentage.toString()}%</span>
+                    </li>
+                    <li class="flex justify-between">
+                      <span>Moisture Content:</span> 
+                      <span id="moisture">${labData.moisturePercentage.toString()}%</span>
+                    </li>
+                    <li class="flex justify-between">
+                      <span>Lead (Heavy Metals):</span> 
+                      <span id="lead">${labData.lead_ppm.toString()} ppm</span>
+                    </li>
+                    <li class="flex justify-between items-center mt-2">
+                      <span>Certificate CID:</span>
+                      <span id="cid" class="font-mono bg-gray-200 px-2 py-1 rounded text-xs" title="${labData.certificateCid}">${truncateAddress(labData.certificateCid, 8)}</span>
+                    </li>
+                  </ul>
+                </div>
+              `;
+            } else {
+               detailsHtml = `<p class="text-base font-normal text-gray-500">${step.data}</p>`;
+            }
+
+            const timelineItem = document.createElement('li');
+            timelineItem.className = "mb-10 ml-6";
+            timelineItem.innerHTML = `
+              <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">
+                <svg class="w-4 h-4 text-blue-800" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+              </span>
+              <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900">
+                ${step.stepName}
+              </h3>
+              <time class="block mb-2 text-sm font-normal leading-none text-gray-500">${formatTimestamp(step.timestamp)}</time>
+              ${detailsHtml}
+              <p class="text-xs text-gray-400 mt-2 truncate" title="${step.recordedBy}">
+                Actor: <span>${truncateAddress(step.recordedBy, 10)}</span>
+              </p>
+            `;
+            timelineContainer.appendChild(timelineItem);
+          });
+          
+          // 6. Show the main content
+          statusMessage.classList.add("hidden");
+          mainContent.classList.remove("hidden");
+
+        } catch (err) {
+          console.error("Failed to load provenance data:", err);
+          statusMessage.innerHTML = `<p class="font-semibold text-red-600">Error: ${err.message}</p>`;
+        }
+      }
+      
+      // ---- KICK OFF THE DATA LOAD ----
+      window.onload = loadProvenanceData;
+
+      // ---- YOUR EXISTING GEMINI AI SUMMARY FUNCTION ----
       async function getSummary() {
         const button = document.getElementById("generate-summary-btn");
         const btnIcon = document.getElementById("btn-icon");
@@ -225,52 +287,8 @@
           const purity = document.getElementById("purity").innerText;
           const moisture = document.getElementById("moisture").innerText;
           const lead = document.getElementById("lead").innerText;
-
-//           const userQuery = `
-// You are an AI assistant that formats raw data into a fixed markdown template. Do not add any conversational text, introductions, or extra explanations. Follow the structure from the example precisely.
-
-// ### Example
-// Input Data:
-// {
-//     "species": "Tulsi",
-//     "batchId": "456",
-//     "location": "Varanasi, Uttar Pradesh",
-//     "purity": "97%",
-//     "lead": "1.5 ppm",
-//     "moisture": "9%"
-// }
-
-// Expected Output:
-// ### Your Tulsi Report
-
-// **Traceability:**
-// This batch of **Tulsi** (ID: 456) has been traced directly to its origin in **Varanasi, Uttar Pradesh**.
-
-// **Quality & Safety Checklist:**
-// * **Purity:** It has a verified purity of **97%**, which indicates a high concentration of active compounds.
-// * **Safety:** The heavy metal (lead) content is **1.5 ppm**, which is well within safe consumption limits.
-// * **Shelf Life:** A moisture level of **9%** ensures it is properly dried for maximum freshness and longevity.
-
-// **Conclusion:**
-// This product is a genuine, high-quality herb that has passed all on-chain quality checks.
-
-// ---
-
-// ### Task
-// Input Data:
-// {
-//     "species": "${species}",
-//     "batchId": "${batchId}",
-//     "location": "${location}",
-//     "purity": "${purity}",
-//     "lead": "${lead}",
-//     "moisture": "${moisture}"
-// }
-
-// Expected Output:
-// `;
-
-           const userQuery = `
+          
+          const userQuery = `
 Act as a friendly and knowledgeable guide explaining a product's quality report to a health-conscious consumer.
 Answer the following questions using the provided data.
 The tone should be simple, trustworthy, and reassuring. Explain *why* each fact is important.
@@ -297,7 +315,8 @@ Absolutely. It has been carefully dried to a moisture level of **${moisture}** t
 **4. How is this information verified?**
 Every step of this herb's journey—from the farm to this bottle—is recorded and secured on a blockchain. This creates a permanent, tamper-proof record of its quality and authenticity.
 `;
-          const apiKey = "AIzaSyBhYqlcQKVewc7VP41B40NvqRWBu27IlRw"; // ⚠️ Replace with your actual key
+          // ⚠️ You should secure your API key, for example, by using a backend proxy or serverless function
+          const apiKey = "YOUR_GEMINI_API_KEY"; // ⚠️ Replace with your actual key
           const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
           const response = await fetch(apiUrl, {
@@ -307,7 +326,8 @@ Every step of this herb's journey—from the farm to this bottle—is recorded a
           });
 
           if (!response.ok) {
-            throw new Error(`Gemini API call failed with status ${response.status}`);
+            const errorBody = await response.text();
+            throw new Error(`Gemini API call failed with status ${response.status}: ${errorBody}`);
           }
 
           const result = await response.json();
@@ -322,13 +342,13 @@ Every step of this herb's journey—from the farm to this bottle—is recorded a
           }
         } catch (error) {
           console.error("Error generating summary:", error);
-          resultDiv.innerText = `Error: ${error.message}`;
+          resultDiv.innerText = `Error generating summary: ${error.message}`;
           resultDiv.classList.remove("hidden");
           placeholder.classList.add("hidden");
         } finally {
           button.disabled = false;
           btnIcon.innerHTML =
-            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stars mr-2" viewBox="0 0 16 16"><path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.829l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.829l.645-1.937z"/></svg>';
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stars mr-2" viewBox="0 0 16 16"><path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.829l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.829l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.3l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.3A1.734 1.734 0 0 0 2.31 4.207l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z"/></svg>';
           btnText.innerText = "Regenerate Summary";
         }
       }
